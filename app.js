@@ -1,17 +1,66 @@
-var app   = require('express')();
-var http = require('http').Server(app);
-//var mysql = require('mysql');
-var bodyParser = require("body-parser");
-/*var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'nihongo',
-  });*/
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
-  
+/**
+ * Module dependencies.
+ */
+
+var express = require('express');
+var routes = require('./routes');
+var user = require('./routes/user');
+var http = require('http');
+var path = require('path');
+
+var app = express();
+
+// all environments
+app.set('port', process.env.PORT || 3000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+//app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+//app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// development only
+if ('development' == app.get('env')) {
+  app.use(express.errorHandler());
+}
+
+/*------------------------------------------
+    connection peer, register as middleware
+    type koneksi : single,pool and request 
+-------------------------------------------*/
+//DB config
+/*var mysql      = require('mysql');
+global.connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'nodejs'
+});
+
+connection.connect(function(err){
+	if(!err) {
+    console.log("Database is connected ... \n\n");  
+	} else {
+    console.log("Error connecting database ... \n\n");  
+	}
+});*/
+
+//Customer
+//var customers = require('./routes/customers');
+//app.get("/customers",customers.list);
+//
+//app.get('/', routes.index);//route customer list
+//app.get('/customers', customers.list);//route add customer, get n post
+//app.get('/customers/add', customers.add);
+//app.post('/customers/add', customers.save);//route delete customer
+//app.get('/customers/delete/:id', customers.delete_customer);//edit customer route , get n post
+//app.get('/customers/edit/:id', customers.edit); 
+//app.post('/customers/edit/:id',customers.save_edit);
+
 app.get('/',function(req,res){
   var data = {"Data":""};
   data["Data"] = "Welcome to Book Store DEMO...";
@@ -23,78 +72,7 @@ app.get('/book',function(req,res){
   res.json(data);
 });
 
-/*
-app.post('/book',function(req,res){
-  var Bookname = req.body.bookname;
-  var Authorname = req.body.authorname;
-  var Price = req.body.price;
-  var data = {
-    "error":1,
-    "Books":""
-  };
-  if(!!Bookname && !!Authorname && !!Price){
-    connection.query("INSERT INTO book VALUES('',?,?,?)",[Bookname,Authorname,Price],function(err, rows, fields){
-      if(!!err){
-        data["Books"] = "Error Adding data";
-      }else{
-        data["error"] = 0;
-        data["Books"] = "Book Added Successfully";
-      }
-      res.json(data);
-    });
-  }else{
-    data["Books"] = "Please provide all required data (i.e : Bookname, Authorname, Price)";
-    res.json(data);
-  }
-});
-
-app.put('/book',function(req,res){
-  var Id = req.body.id;
-  var Bookname = req.body.bookname;
-  var Authorname = req.body.authorname;
-  var Price = req.body.price;
-  var data = {
-    "error":1,
-    "Books":""
-  };
-  if(!!Id && !!Bookname && !!Authorname && !!Price){
-    connection.query("UPDATE book SET BookName=?, AuthorName=?, Price=? WHERE id=?",[Bookname,Authorname,Price,Id],function(err, rows, fields){
-      if(!!err){
-        data["Books"] = "Error Updating data";
-      }else{
-        data["error"] = 0;
-        data["Books"] = "Updated Book Successfully";
-      }
-      res.json(data);
-    });
-  }else{
-    data["Books"] = "Please provide all required data (i.e : id, Bookname, Authorname, Price)";
-    res.json(data);
-  }
-});
-
-app.delete('/book',function(req,res){
-  var Id = req.body.id;
-  var data = {
-    "error":1,
-    "Books":""
-  };
-  if(!!Id){
-    connection.query("DELETE FROM book WHERE id=?",[Id],function(err, rows, fields){
-      if(!!err){
-        data["Books"] = "Error deleting data";
-      }else{
-        data["error"] = 0;
-        data["Books"] = "Delete Book Successfully";
-      }
-      res.json(data);
-    });
-  }else{
-    data["Books"] = "Please provide all required data (i.e : id )";
-    res.json(data);
-  }
-});*/
-
-http.listen(3000,function(){
-  console.log("Connected & Listen to port 3000");
+app.use(app.router);
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
 });
