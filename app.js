@@ -100,6 +100,11 @@ app.post('/book',function(req,res){
   }
 }*/
 
+app.get('/', function(req, res) {
+  var data = {"Data":"Welcome to Book Store DEMO..."};
+  res.json(data);
+});
+
 //app.use(app.router);
 require('./routes/book.js')(app);
 http.createServer(app).listen(app.get('port'), function(){
