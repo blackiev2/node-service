@@ -8,7 +8,9 @@ module.exports = function(app) {
 			if (err){
 				res.send(err);
 			}
-			res.json(book);
+			var data = {"error":1,"books":""};
+			data["books"] = book;
+			res.json(data);
 		});
 	});
 
@@ -18,7 +20,9 @@ module.exports = function(app) {
 				if (err){
 					res.send(err);
 				}
-				res.json(book);
+				var data = {"error":1,"books":""};
+				data["books"] = book;
+				res.json(data);
 		});
 	});
 
