@@ -43,8 +43,9 @@ module.exports = function(app) {
 	});
 
 	app.put('/book/', function(req, res) {
-		book.update({_id : req.body.id},
-			{	name : req.body.n,
+		book.update(
+			{_id : req.body.id},
+			$set:{	name : req.body.n,
 				author : req.body.a,
 				price : req.body.p,
 				done : false
