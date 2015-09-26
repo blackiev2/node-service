@@ -29,9 +29,9 @@ module.exports = function(app) {
 	app.post('/book/', function(req, res) {
 		book.create({
 			//_id: getNextSequence("bookid"),
-			name : req.body.name,
-			author : req.body.author,
-			price : req.body.price,
+			name : req.body.n,
+			author : req.body.a,
+			price : req.body.p,
 			done : false
 		}, function(err, book) {
 			if (err){
@@ -44,9 +44,9 @@ module.exports = function(app) {
 
 	app.put('/book/', function(req, res) {
 		book.update({_id : req.body.id},
-			{	name : req.body.name,
-				author : req.body.author,
-				price : req.body.price,
+			{	name : req.body.n,
+				author : req.body.a,
+				price : req.body.p,
 				done : false
 			},{},function(err, book) {
 				if (err){
