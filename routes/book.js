@@ -43,12 +43,13 @@ module.exports = function(app) {
 	});
 
 	app.put('/book/', function(req, res) {
-		book.update(
-			{_id : req.body.id},
-			$set:{	name : req.body.n,
+		//update({aid:appId}, {$set: {sid : id}}, {upsert: true}, function(e, r)
+		book.update({_id : req.body.id},
+			{$set:
+				{	name : req.body.n,
 				author : req.body.a,
 				price : req.body.p,
-				done : false
+				done : false }
 			},{},function(err, book) {
 				if (err){
 					res.send(err);
